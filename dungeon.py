@@ -3,7 +3,7 @@ import random
 import os
 import sys
 
-### VARIABLES/COLLECTIONS ###
+### GLOBAL VARIABLES/COLLECTIONS ###
 #5x5 grid made up of x and y coordinates
 CELLS = [(0,0),(1,0),(2,0),(3,0),(4,0),
          (0,1),(1,1),(2,1),(3,1),(4,1),
@@ -12,7 +12,6 @@ CELLS = [(0,0),(1,0),(2,0),(3,0),(4,0),
          (0,4),(1,4),(2,4),(3,4),(4,4)]
 
 ### FUNCTIONS ###
-
 def clear_screen():
   os.system ('cls' if os.name == 'nt' else 'clear')
 
@@ -33,10 +32,8 @@ def get_moves(player):
   return moves
 
 def move_player(player, move):
-  #get the players location
   x, y = player
-  #Good move? Move player position
-  #Bad move (i.e. out of bounds)? Dont move player and warn about boundaries
+
   if move == "LEFT" and x == 0:
     print("You can't move left.")
   elif move == "LEFT":
@@ -75,24 +72,23 @@ def draw_map(player):
         output = tile.format("_|")
     print(output, end=line_end)
 
-
 def game_loop():
-  player, door, monster = get_locations() #pick random location for player, door and monster
+  player, door, monster = get_locations()
   while True:
     draw_map(player)
-    print("You are currently in room {}".format(CELLS.index(player) + 1)) # fill with player position
-    print("You can move {}".format(", ".join(get_moves(player)))) #fill with available moves
+    print("You are currently in room {}".format(CELLS.index(player) + 1))
+    print("You can move {}".format(", ".join(get_moves(player))))
     print("Enter QUIT to quit."),
 
-    move = input("> ").upper()#take input from player for movement
+    move = input("> ").upper()
 
     if move == "QUIT":
       sys.exit()
     else:
       clear_screen()
-      player = move_player(player, move)#move player, unless past edges of grid
-      #check for win/loss
-      if player == door: #On the door? YOU WIN
+      player = move_player(player, move)
+
+      if player == door:
         print("\n *** You've escaped the dungeon! *** \n")
         again = input("Play again? [Y/n]: ")
         if again.lower() == "n":
@@ -100,15 +96,13 @@ def game_loop():
           sys.exit()
         else:
           continue
-      elif player == monster: #On the monster? YOU LOSE
+      elif player == monster:
         print("\n *** Oh, no. You have just been disembowled by a gruesome monster. Sorry dude. *** \n")
         sys.exit()
       else:
         continue
 
-      #clear screen and redraw grid
-
-#game loop
+### GAME PLAY ###
 while True:
   print("Welcome to the dungeon!")
   input("Press enter to begin")
